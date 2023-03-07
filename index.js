@@ -50,7 +50,7 @@ client.configs = {
     developers: require('./config/developers.json').developers,
     footer: {
         text: 'Made by Benpai',
-        iconURL: 'https://bsh.daad.wtf/discord/user/957352586086875216/avatar'
+        iconURL: 'https://api.daad.wtf/discord/user/957352586086875216/avatar'
     },
     color: 0xff7777,
     embed: () => new EmbedBuilder().setFooter(client.configs.footer).setColor(client.configs.color).setTimestamp(),
