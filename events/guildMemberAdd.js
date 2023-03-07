@@ -1,15 +1,13 @@
-const { Events, EmbedBuilder } = require('discord.js')
+const { Events } = require('discord.js')
 
 module.exports = {
     name: Events.GuildMemberAdd,
     once: false,
     async execute(client, member) {
-        const embed = new EmbedBuilder()
+        const embed = client.configs.embed()
             .setTitle('Welcome')
-            .setDescription(`Welcome to the server, ${member}! You are the ${member.guild.memberCount}th member!`)
-            .setColor('#ff0000')
-            .setTimestamp()
-        await member.send({
+            .setDescription(`Welcome to the server, ${member.tag}! You are the ${member.guild.memberCount}th member!`)
+        await client.channels.cache.get('1079083148333301832').send({
             embeds: [embed]
         })
     }

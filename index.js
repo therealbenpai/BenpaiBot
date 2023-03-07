@@ -1,4 +1,4 @@
-const { Client, Partials, GatewayIntentBits, ActivityType, PresenceUpdateStatus } = require('discord.js');
+const { Client, Partials, GatewayIntentBits, ActivityType, PresenceUpdateStatus, EmbedBuilder } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
@@ -52,7 +52,8 @@ client.configs = {
         text: 'Made by Benpai',
         iconURL: 'https://bsh.daad.wtf/discord/user/957352586086875216/avatar'
     },
-    color: 0xff7777
+    color: 0xff7777,
+    embed: () => new EmbedBuilder().setFooter(client.configs.footer).setColor(client.configs.color).setTimestamp()
 }
 client.database = new Database();
 

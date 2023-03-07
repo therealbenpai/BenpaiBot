@@ -1,4 +1,4 @@
-const { EmbedBuilder, Events } = require('discord.js');
+const { Events } = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
@@ -20,14 +20,13 @@ module.exports = {
         }
         if (message.channel.isDMBased()) {
             const logs = client.channels.cache.get('1079230181841051819');
-            const embed = new EmbedBuilder()
+            const embed = new client.configs.embed()
                 .setTitle('New ModMail Message')
                 .setDescription(message.content)
                 .setAuthor({
                     name: message.author.tag,
                     iconURL: message.author.avatarURL({ size: 256 })
                 })
-                .setTimestamp()
                 .setFooter({
                     text: message.author.id
                 });
