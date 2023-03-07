@@ -1,5 +1,5 @@
-class TimeManager {
-    static intlDateTimeSettings = {
+module.exports = class TimeManager {
+    static #intlDateTimeSettings = {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -49,9 +49,9 @@ class TimeManager {
     static time(type = 'US') {
         switch (type) {
             case 'GB':
-                return Intl.DateTimeFormat('en-GB', this.intlDateTimeSettings).format()
+                return Intl.DateTimeFormat('en-GB', this.#intlDateTimeSettings).format()
             default:
-                return Intl.DateTimeFormat('en-US', this.intlDateTimeSettings).format()
+                return Intl.DateTimeFormat('en-US', this.#intlDateTimeSettings).format()
         }
     }
     static timeStringtoMs(timeString) {

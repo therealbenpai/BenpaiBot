@@ -10,7 +10,8 @@ module.exports = {
         usage: '`/ping`'
     },
     async execute(client, interaction) {
-        if (!client.configs.developers.includes(interaction.user.id)) return await interaction.reply('Pong!');
-        return await interaction.reply(`Current Ping: ${client.ws.ping}ms`);
+        const reply = client.configs.developers.includes(message.author.id) ?
+            `Current Ping: ${client.ws.ping}ms` : 'Pong!'
+        await interaction.reply(reply);
     }
 }

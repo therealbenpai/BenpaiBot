@@ -4,6 +4,12 @@ const fs = require('fs');
 module.exports = {
     name: Events.MessageUpdate,
     once: false,
+    /**
+     * 
+     * @param {import('discord.js').Client} client 
+     * @param {import('discord.js').Message} oldMessage 
+     * @param {import('discord.js').Message} newMessage 
+     */
     async execute(client, oldMessage, newMessage) {
         if (oldMessage.author.bot) return;
         if (oldMessage.content == newMessage.content) return;
@@ -13,11 +19,9 @@ module.exports = {
             const { triggers, execute, args } = trigger;
             for (const phrase of triggers) {
                 if (newMessage.content.toLowerCase().includes(phrase)) {
-                    const contentArgs = newMessage.content.split(' ');
-                    contentArgs.shift();
+                    const contentArgs = newMessage.content.split(' ').slice(1, -1);
                     client.database.triggerLog(newMessage.author.id, 'message', phrase, args ? contentArgs : []);
-                    await execute(client, newMessage);
-                    return;
+                    return await execute(client, newMessage);
                 }
             }
         }

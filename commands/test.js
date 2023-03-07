@@ -12,9 +12,7 @@ module.exports = {
     },
     async execute(client, interaction) {
         await interaction.reply({
-            components: [
-                new ActionRowBuilder().addComponents(component)
-            ],
+            components: [new ActionRowBuilder().addComponents(component)],
             ephemeral: true
         })
     }

@@ -53,8 +53,9 @@ client.configs = {
         iconURL: 'https://bsh.daad.wtf/discord/user/957352586086875216/avatar'
     },
     color: 0xff7777,
-    embed: () => new EmbedBuilder().setFooter(client.configs.footer).setColor(client.configs.color).setTimestamp()
+    embed: () => new EmbedBuilder().setFooter(client.configs.footer).setColor(client.configs.color).setTimestamp(),
 }
+client.timeManager = require('./functions/time');
 client.database = new Database();
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));

@@ -28,36 +28,14 @@ Sentry.init(
     }
 )
 
-class ErrorHandler {
-    static generateErrorID(error) {
-        return v5(crypto.createHmac('sha512', 'ErrorHashKey-jdlancdsjkn54327869').update(error.stack).digest('hex'), '6ba7b810-9dad-11d1-80b4-00c04fd430c8');
-    }
+module.exports = class ErrorHandler {
+    static generateErrorID = (error) => v5(crypto.createHmac('sha512', 'ErrorHashKey-3r2w7yii3s4rgs').update(error.stack).digest('hex'), '6ba7b810-9dad-11d1-80b4-00c04fd430c8');
     static async catchErrors(error, interaction) {
         const errorID = this.generateErrorID(error);
         Sentry.captureException(error, { tags: { errorID }, level: 'error' });
         console.log(`New Error Thrown. Error ID: ${errorID}`)
         console.log(error);
-        if (interaction && !interaction.author) {
-            if (interaction.replied || interaction.deferred) {
-                return await interaction.followUp({
-                    content: [
-                        'There was an error while executing this command! Please contact one of my developers of this issue.',
-                        '',
-                        `Please provide this error ID to the developer: \`${errorID}\``
-                    ].join('\n'),
-                    ephemeral: true
-                })
-            }
-            return await interaction.reply({
-                content: [
-                    'There was an error while executing this command! Please contact one of my developers of this issue.',
-                    '',
-                    `Please provide this error ID to the developer: \`${errorID}\``
-                ].join('\n'),
-                ephemeral: true
-            })
-        }
+        const reply = { content: ['There was an error while executing this command! Please contact one of my developers of this issue.', '', `Please provide this error ID to the developer: \`${errorID}\``].join('\n'), ephemeral: true }
+        if (interaction && !interaction.author) interaction.isRepliable() ? await interaction.reply(reply) : await interaction.followUp(reply);
     }
 }
-
-module.exports = ErrorHandler;
