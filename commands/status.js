@@ -22,10 +22,10 @@ module.exports = {
         const embed = client.configs.embed()
             .setTitle('Status')
             .addFields(
-                { name: 'Uptime', value: `Current Uptime: ${uptime}`, inline: true },
-                { name: 'Ping', value: `Current Ping: ${ping}ms`, inline: true },
-                { name: 'CPU', value: `Current CPU Usage: ${cpu.toFixed(2)}%`, inline: true },
-                { name: 'Memory', value: `Current Memory Usage: ${memory.toFixed(2)}GB`, inline: true }
+                { name: 'Uptime', value: `Current Uptime: ${uptime}` },
+                { name: 'Ping', value: `Current Ping: ${ping}ms` },
+                { name: 'CPU', value: `Current CPU Usage: ${cpu.toFixed(2)}%` },
+                { name: 'Memory', value: `Current Memory Usage: ${memory.toFixed(2)}GB` }
             )
         await interaction.reply({ embeds: [embed] });
     }
