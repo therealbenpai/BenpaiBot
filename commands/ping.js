@@ -10,7 +10,7 @@ module.exports = {
         usage: '`/ping`'
     },
     async execute(client, interaction) {
-        const reply = client.configs.developers.includes(message.author.id) ?
+        const reply = client.configs.developers.includes(interaction.user.id) ?
             `Current Ping: ${client.ws.ping}ms` : 'Pong!'
         await interaction.reply(reply);
     }

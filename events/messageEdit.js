@@ -20,8 +20,13 @@ module.exports = {
             for (const phrase of triggers) {
                 if (newMessage.content.toLowerCase().includes(phrase)) {
                     const contentArgs = newMessage.content.split(' ').slice(1, -1);
-                    client.database.triggerLog(newMessage.author.id, 'message', phrase, args ? contentArgs : []);
-                    return await execute(client, newMessage);
+                    const id = await client.database.triggerLog(newMessage.author.id, 'message', phrase, args ? contentArgs : []);
+                    try {
+                        await execute(client, newMessage, id);
+                    } catch (e) {
+                        await require('../functions/errorHandling').catchErrors(e, newMessage, id);
+                    }
+                    return;
                 }
             }
         }

@@ -28,6 +28,9 @@ module.exports = class Database {
             triggerArgs: JSON.stringify(args),
             triggerTime: time
         }
-        await this.connection.promise().query(`INSERT INTO logs SET ?`, data).catch(err => console.log(err));
+        await this.connection.promise().query(`INSERT INTO logs SET ?`, data).catch(error => console.log);
+        // grab the most recent log id with the column id and return it
+        const logID = await this.connection.promise().query(`SELECT id FROM logs WHERE triggerId = '${userID}' AND triggerTime = '${time}'`).then(rows => rows[0][0].id).catch(error => console.log);
+        return logID;
     }
 }

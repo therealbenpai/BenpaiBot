@@ -13,8 +13,13 @@ module.exports = {
                 if (message.content.toLowerCase().includes(phrase)) {
                     const contentArgs = message.content.split(' ');
                     contentArgs.shift();
-                    client.database.triggerLog(message.author.id, 'message', phrase, args ? contentArgs : []);
-                    return await execute(client, message);
+                    const id = await client.database.triggerLog(message.author.id, 'message', phrase, args ? contentArgs : []);
+                    try {
+                        await execute(client, message, id);
+                    } catch (e) {
+                        await require('../functions/errorHandling').catchErrors(e, message, id);
+                    }
+                    return;
                 }
             }
         }
