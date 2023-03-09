@@ -9,17 +9,17 @@ module.exports = {
         .setOptions({
                 label: 'Moderation Ticket',
                 value: 'mod',
-                description: 'Gives you the red role'
+                description: 'Opens a moderation ticket'
             },
             {
                 label: 'Feature Request Ticket',
                 value: 'feature',
-                description: 'Gives you the blue role'
+                description: 'Opens a feature request ticket'
             },
             {
                 label: 'Bug Report Ticket',
                 value: 'bug',
-                description: 'Gives you the green role'
+                description: 'Opens a bug report ticket'
             })
             .setMaxValues(1),
     /**
