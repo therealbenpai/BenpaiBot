@@ -70,7 +70,7 @@ module.exports = {
             )
 
         const initalMessage = await ticketChannel.send({
-            content: `${interaction.user}`,
+            content: `${interaction.user} <@&1079230268658958517>`,
             embeds: [detailsEmbed],
             components: [new ActionRowBuilder().addComponents(require('./closeTicket').data, require('./claimTicket').data)]
         })
