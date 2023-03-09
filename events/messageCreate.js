@@ -25,7 +25,7 @@ module.exports = {
         }
         if (message.channel.isDMBased()) {
             const logs = client.channels.cache.get('1079230181841051819');
-            const embed = new client.configs.embed()
+            const embed = client.configs.embed()
                 .setTitle('New ModMail Message')
                 .setDescription(message.content)
                 .setAuthor({
@@ -38,11 +38,12 @@ module.exports = {
             await logs.send({ embeds: [embed] });
         }
         // detect if the message replies to the bot
-        if (message.mentions.has(client.user) && message.type == 19) {
+        if (message.mentions.has(client.user) && message.type == 19 && message.channel.id == "1079230181841051819") {
             await message.channel.messages.fetch(message.reference.messageId)
                 .then(async msg => {
                     if (msg.embeds.length !== 1) return;
                     if (!msg.embeds[0].footer) return;
+                    if (msg.embeds[0].title !== 'New ModMail Message') return;
                     const embed = msg.embeds[0];
                     const sendID = embed.footer.text;
                     (await client.users.cache.get(sendID).createDM(true)).send(

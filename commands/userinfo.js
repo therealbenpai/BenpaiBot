@@ -25,12 +25,12 @@ module.exports = {
             .setThumbnail(user.displayAvatarURL())
             .setTitle('User Information')
             .addFields(
-                { name: 'User ID', value: user.id, inline: true },
-                { name: 'Nickname', value: member.nickname || 'None', inline: true },
-                { name: 'Account Created', value: user.createdAt.toUTCString(), inline: true },
-                { name: 'Joined Server', value: member.joinedAt.toUTCString(), inline: true },
-                { name: 'Presence', value: presence ? presence.name : 'None', inline: true },
-                { name: 'Roles', value: roles || 'None', inline: true }
+                { name: 'User ID', value: user.id },
+                { name: 'Nickname', value: member.nickname || 'None' },
+                { name: 'Account Created', value: client.timeManager.time('US',user.createdAt) },
+                { name: 'Joined Server', value: client.timeManager.time('US',member.joinedAt) },
+                { name: 'Presence', value: presence ? presence.name : 'None' },
+                { name: 'Roles', value: roles || 'None' }
             )
         await interaction.reply({ embeds: [embed] });
     }

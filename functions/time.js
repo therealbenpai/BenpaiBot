@@ -46,12 +46,12 @@ module.exports = class TimeManager {
             .filter(value => value !== '')
             .join(', ');
     }
-    static time(type = 'US') {
+    static time(type = 'US', date=Date.now()) {
         switch (type) {
             case 'GB':
-                return Intl.DateTimeFormat('en-GB', this.#intlDateTimeSettings).format()
+                return Intl.DateTimeFormat('en-GB', this.#intlDateTimeSettings).format(date)
             default:
-                return Intl.DateTimeFormat('en-US', this.#intlDateTimeSettings).format()
+                return Intl.DateTimeFormat('en-US', this.#intlDateTimeSettings).format(date)
         }
     }
     static timeStringtoMs(timeString) {
