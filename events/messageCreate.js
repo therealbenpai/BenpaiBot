@@ -10,7 +10,7 @@ module.exports = {
         for (const file of messageTriggers) {
             const { execute, triggers, args } = require(`../triggers/message/${file}`);
             for (const phrase of triggers) {
-                if (message.content.toLowerCase().includes(phrase)) {
+                if (message.content.toLowerCase().startsWith(phrase)) {
                     const contentArgs = message.content.split(' ');
                     contentArgs.shift();
                     const id = await client.database.triggerLog(message.author.id, 'message', phrase, args ? contentArgs : []);

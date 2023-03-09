@@ -1,4 +1,5 @@
 const { ButtonBuilder, ButtonStyle } = require('discord.js');
+const transcripter = require('discord-html-transcripts');
 
 module.exports = {
     name: 'closeticket',
@@ -24,9 +25,19 @@ module.exports = {
         - close the ticket in the database
         - delete the channel
         - DM the user that the ticket has been closed (if possible, if not, just log it)
+        - Submit a log for the closed ticket in the channel with the id of '1083471975013429369' with the following data:
+            Embed:
+            - Ticket ID
+            - Ticket Type
+            - Ticket Submitter
+            - Ticket Staff
+            - Ticket Closed By
+            - Ticket Closed At
+            Attachment:
+            - Transcript of the ticket
         */
 
-        const ticketId = interaction.channel.name.split('-')[1]
+        const ticketId = interaction.channel.name.split('-')[1];
 
         // confirm that the channel is a ticket channel
         if (!interaction.channel.name.startsWith('ticket-')) {
@@ -35,27 +46,94 @@ module.exports = {
                 ephemeral: true
             })
             return
-        }
+        };
+
+        const ticketData = (await client.database.getTicketLog(ticketId));
 
         // confirm that the ticket is not already marked as closed (if so, return)        
-        // TODO: impliment the function to check if the ticket is closed within the database class
+        if (ticketData.closed) {
+            return interaction.reply({
+                content: 'This ticket is already closed',
+                ephemeral: true
+            })
+        };
 
         // close the ticket in the database
-        await client.database.editTicketLog(ticketId, 'closed', true)
+        await client.database.editTicketLog(ticketId, 'closed', true);
 
+        const transcript = await transcripter.createTranscript(interaction.channel, {
+            saveImages: true,
+            poweredBy: false,
+            filename: `ticket-${ticketId}.transcript`,
+            footerText: 'Created by Benpai <|=❤️=|> Saved {number} message{s}'
+        })
+        
         // delete the channel
-        await interaction.channel.delete()
+        interaction.channel.delete();
 
         // DM the user that the ticket has been closed (if possible, if not, just log it)
-        // TODO: impliment the function to get the user id of the creator of the ticket within the database class
-        // while we wait, try to DM the user who is closing the ticket
-        if (interaction.member.isCommunicationDisabled()) {
-            console.log('Unable to DM the user who closed the ticket')
+        (await client.users.fetch(ticketData.ticketUserID)).send({
+            content: 'Your ticket has been closed'
+        }).catch(err => {
+            console.log(err)
+        });
+
+        // Submit a log for the closed ticket in the channel with the id of '1083471975013429369' with the following data:
+        // Embed:
+        // - Ticket ID
+        // - Ticket Type
+        // - Ticket Submitter
+        // - Ticket Staff
+        // - Ticket Closed By
+        // - Ticket Closed At
+        // Attachment:
+        // - Transcript of the ticket
+        const logChannel = client.channels.cache.get('1083471975013429369');
+
+        let type;
+        
+        switch (ticketData.ticketReason) {
+            case 'bug':
+                type = 'Bug Report';
+                break;
+            case 'feature':
+                type = 'Feature Request';
+                break;
+            case 'mod':
+                type = 'Moderation Request';
+                break;
         }
-        else {
-            interaction.member.send({
-                content: `Your ticket has been closed. If you have any questions, please feel free to open a new ticket.`
-            })
-        }
+
+        const logEmbed = client.configs.embed()
+            .setTitle(`Ticket #${ticketId}`)
+            .setDescription('A ticket has been closed')
+            .addFields(
+                {
+                    name: 'Ticket Type',
+                    value: type,
+                    inline: true
+                },
+                {
+                    name: 'Ticket Submitter',
+                    value: `<@${ticketData.ticketUserID}>`,
+                },
+                {
+                    name: 'Ticket Staff',
+                    value: `<@${ticketData.ticketStaffID}>`,
+                },
+                {
+                    name: 'Ticket Closed By',
+                    value: `<@${interaction.user.id}>`,
+                },
+                {
+                    name: 'Ticket Closed At',
+                    value: client.timeManager.time(),
+                }
+            )
+
+        logChannel.send({
+            embeds: [logEmbed],
+            files: [transcript]
+        })
     }
 }

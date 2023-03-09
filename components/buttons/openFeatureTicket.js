@@ -47,26 +47,35 @@ module.exports = {
         const ticketChannelID = await client.database.createTicketLog(interaction.user.id, 'feature', ticketChannel.id)
 
         ticketChannel.setName(`ticket-${ticketChannelID}`)
-        
+
         const detailsEmbed = client.configs.embed()
             .setTitle('Ticket #' + ticketChannelID)
             .setDescription('Thank you for opening a ticket. Please be patient while a staff member assists within this ticket.')
             .addFields(
                 {
                     name: 'Ticket Type',
-                    value: 'Feature Request Report'
+                    value: 'Feature Request Report',
+                    inline: true
                 },
                 {
                     name: 'Submitter',
-                    value: `${interaction.user}`
+                    value: `${interaction.user}`,
+                    inline: true
+                },
+                {
+                    name: 'Claimed By',
+                    value: 'None',
+                    inline: true
                 }
             )
 
-        ticketChannel.send({
-            content: `${interaction.user} <@&1079230268658958517>`,
+        const initalMessage = await ticketChannel.send({
+            content: `${interaction.user}`,
             embeds: [detailsEmbed],
-            components: [new ActionRowBuilder().addComponents(require('./closeTicket').data)]
+            components: [new ActionRowBuilder().addComponents(require('./closeTicket').data, require('./claimTicket').data)]
         })
+
+        initalMessage.pin()
 
         interaction.reply({
             content: `Your ticket has been opened at ${ticketChannel}`,

@@ -37,7 +37,7 @@ module.exports = class Database {
     }
     async editTicketLog(ticketId, columnToChange, newValue) {
         switch (columnToChange) {
-            case 'ticketStaffId':
+            case 'ticketStaffID':
                 if (typeof newValue !== 'string') return false;
                 if (newValue.length > 20) return false;
                 break;
@@ -58,5 +58,8 @@ module.exports = class Database {
         }
         await this.connection.promise().query(`UPDATE tickets SET ${columnToChange} = '${newValue}' WHERE id = '${ticketId}'`).catch(error => console.log);
         return true;
+    }
+    async getTicketLog(ticketId) {
+        return (await this.connection.promise().query(`SELECT * FROM tickets WHERE id = '${ticketId}'`).then(rows => rows[0][0]).catch(error => console.log))
     }
 }
