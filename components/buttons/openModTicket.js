@@ -52,15 +52,27 @@ module.exports = {
         const ticketChannelID = await client.database.createTicketLog(interaction.user.id, 'mod', ticketChannel.id)
 
         ticketChannel.setName(`ticket-${ticketChannelID}`)
+
+        const detailsEmbed = client.configs.embed()
+            .setTitle('Ticket #' + ticketChannelID)
+            .setDescription('Thank you for opening a ticket. Please be patient while a staff member assists within this ticket.')
+            .addFields(
+                {
+                    name: 'Ticket Type',
+                    value: 'Moderation Report'
+                },
+                {
+                    name: 'Submitter',
+                    value: `${interaction.user}`
+                }
+            )
+
         ticketChannel.send({
-            content: `Thank you for opening a ticket. Please be patient while we review your ticket.`,
-            components: [
-                new ActionRowBuilder()
-                    .addComponents(
-                        require('./closeTicket').data
-                    )
-            ]
+            content: `${interaction.user} <@&1079230268658958517>`,
+            embeds: [detailsEmbed],
+            components: [new ActionRowBuilder().addComponents(require('./closeTicket').data)]
         })
+
         interaction.reply({
             content: `Your ticket has been opened at ${ticketChannel}`,
             ephemeral: true
