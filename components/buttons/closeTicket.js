@@ -85,7 +85,7 @@ module.exports = {
             host: process.env.SSH_HOST,
             port: process.env.SSH_PORT,
             username: process.env.SSH_USERNAME,
-            password: process.env.SSH_PASS
+            password: process.env.SSH_PASSWD
         });
 
         // delete the channel
