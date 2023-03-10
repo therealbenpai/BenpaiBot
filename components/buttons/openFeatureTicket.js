@@ -36,6 +36,15 @@ module.exports = {
                     type: OverwriteType.Member
                 },
                 {
+                    id: client.user.id,
+                    allow: [
+                        PermissionFlagsBits.ViewChannel,
+                        PermissionFlagsBits.SendMessages,
+                        PermissionFlagsBits.ManageMessages,
+                    ],
+                    type: OverwriteType.Member
+                },
+                {
                     id: '1079230268658958517',
                     allow: [
                         PermissionFlagsBits.ViewChannel
