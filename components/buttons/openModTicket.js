@@ -50,7 +50,7 @@ module.exports = {
                     type: OverwriteType.Member
                 },
                 {
-                    id: '1079230268658958517',
+                    id: serverSettings.ticketSupportRoleId,
                     allow: [
                         PermissionFlagsBits.ViewChannel
                     ],
