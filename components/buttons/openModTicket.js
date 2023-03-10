@@ -19,7 +19,7 @@ module.exports = {
      * @param {import('discord.js').ButtonInteraction} interaction 
      */
     async execute(client, interaction) {
-        const serverSettings = await client.database.getServerSettings(interaction.guild.id)
+        const serverSettings = (await client.database.getServerSettings(interaction.guild.id))
         const ticketCategory = interaction.guild.channels.cache.get(serverSettings.ticketCategory)
         const ticketChannel = await interaction.guild.channels.create({
             type: ChannelType.GuildText,

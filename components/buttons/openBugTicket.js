@@ -14,7 +14,7 @@ module.exports = {
         .setLabel('Open a Bug Report Ticket')
         .setStyle(ButtonStyle.Primary),
     async execute(client, interaction) {
-        const serverSettings = await client.database.getServerSettings(interaction.guild.id)
+        const serverSettings = (await client.database.getServerSettings(interaction.guild.id))
         const ticketCategory = interaction.guild.channels.cache.get(serverSettings.ticketCategory)
         const ticketChannel = await interaction.guild.channels.create({
             type: ChannelType.GuildText,
