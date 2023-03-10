@@ -1,5 +1,7 @@
-const { ButtonBuilder, ButtonStyle } = require('discord.js');
-const transcripter = require('discord-html-transcripts');
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { ExportReturnType, createTranscript } = require('discord-html-transcripts');
+const ssh = require('ssh2');
+require('dotenv').config();
 
 module.exports = {
     name: 'closeticket',
@@ -63,13 +65,29 @@ module.exports = {
         // close the ticket in the database
         await client.database.editTicketLog(ticketId, 'closed', true);
 
-        const transcript = await transcripter.createTranscript(interaction.channel, {
+        const transcript = await createTranscript(interaction.channel, {
             saveImages: true,
             poweredBy: false,
             filename: `ticket-${ticketId}.transcript`,
-            footerText: 'Created by Benpai <|=❤️=|> Saved {number} message{s}'
+            footerText: 'Created by Benpai <|=❤️=|> Saved {number} message{s}',
+            returnType: ExportReturnType.String
         })
-        
+
+        const uuid = require('uuid').v5(transcript,'6ba7b810-9dad-11d1-80b4-00c04fd430c8');
+
+        const conn = new ssh.Client();
+        conn.on('ready', function() {
+            conn.sftp(function(err, sftp) {
+                if (err) throw err;
+                sftp.writeFile(`/CDN/BenpaiBot/transcripts/${uuid}`, transcript, err => console.error)
+            });
+        }).connect({
+            host: process.env.SSH_HOST,
+            port: process.env.SSH_PORT,
+            username: process.env.SSH_USERNAME,
+            password: process.env.SSH_PASS
+        });
+
         // delete the channel
         interaction.channel.delete();
 
@@ -135,7 +153,15 @@ module.exports = {
 
         logChannel.send({
             embeds: [logEmbed],
-            files: [transcript]
+            components: [
+                new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setStyle(ButtonStyle.Link)
+                            .setLabel('View Transcript')
+                            .setURL(`https://sparty18.com/cdn/transcripts/${uuid}`)
+                    )
+            ]
         })
     }
 }
