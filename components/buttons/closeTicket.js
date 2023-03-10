@@ -73,11 +73,11 @@ module.exports = {
             returnType: ExportReturnType.String
         })
 
-        const uuid = require('uuid').v5(transcript,'6ba7b810-9dad-11d1-80b4-00c04fd430c8');
+        const uuid = require('uuid').v5(transcript, '6ba7b810-9dad-11d1-80b4-00c04fd430c8');
 
         const conn = new ssh.Client();
-        conn.on('ready', function() {
-            conn.sftp(function(err, sftp) {
+        conn.on('ready', function () {
+            conn.sftp(function (err, sftp) {
                 if (err) throw err;
                 sftp.writeFile(`/CDN/BenpaiBot/transcripts/${uuid}`, transcript, err => console.error)
             });
@@ -87,6 +87,8 @@ module.exports = {
             username: process.env.SSH_USERNAME,
             password: process.env.SSH_PASSWD
         });
+
+        await client.database.editTicketLog(ticketId, 'transcript', uuid);
 
         // delete the channel
         interaction.channel.delete();
@@ -159,7 +161,7 @@ module.exports = {
                         new ButtonBuilder()
                             .setStyle(ButtonStyle.Link)
                             .setLabel('View Transcript')
-                            .setURL(`https://sparty18.com/cdn/transcript/${uuid}`)
+                            .setURL(`https://sparty18.com/cdn/transcript/${ticketId}`)
                     )
             ]
         })
