@@ -37,6 +37,8 @@ module.exports = {
             - Transcript of the ticket
         */
 
+        const serverSettings = await client.database.getServerSettings(interaction.guild.id);
+
         const ticketId = interaction.channel.name.split('-')[1];
 
         // confirm that the channel is a ticket channel
@@ -88,10 +90,10 @@ module.exports = {
         // - Ticket Closed At
         // Attachment:
         // - Transcript of the ticket
-        const logChannel = client.channels.cache.get('1083471975013429369');
+        const logChannel = interaction.guild.channels.cache.get(serverSettings.ticketLogChannelId);
 
         let type;
-        
+
         switch (ticketData.ticketReason) {
             case 'bug':
                 type = 'Bug Report';

@@ -7,8 +7,10 @@ module.exports = {
         const embed = client.configs.embed()
             .setTitle('Welcome')
             .setDescription(`Welcome to the server, ${member.user.tag}! You are the ${member.guild.memberCount}th member!`)
-        await client.channels.cache.get('1079083148333301832').send({
-            embeds: [embed]
-        })
+        const serverSettings = await client.database.getServerSettings(member.guild.id)
+        await client.channels.cache.get(serverSettings.welcomeChannelId)
+            .send({
+                embeds: [embed]
+            })
     }
 }

@@ -10,7 +10,7 @@ module.exports = {
         usage: '`/sendtickets`'
     },
     async execute(client, interaction) {
-        const ticketChannel = interaction.guild.channels.cache.get('1082825815194095646')
+        const ticketChannel = interaction.channel
         const ticketSelectMenu = require('../components/selectMenus/tickets').data
         ticketChannel.send({
             content: 'Select a ticket to open', components: [

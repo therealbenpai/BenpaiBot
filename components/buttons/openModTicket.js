@@ -19,7 +19,8 @@ module.exports = {
      * @param {import('discord.js').ButtonInteraction} interaction 
      */
     async execute(client, interaction) {
-        const ticketCategory = interaction.guild.channels.cache.get('1083435173980405942')
+        const serverSettings = await client.database.getServerSettings(interaction.guild.id)
+        const ticketCategory = interaction.guild.channels.cache.get(serverSettings.ticketCategory)
         const ticketChannel = await interaction.guild.channels.create({
             type: ChannelType.GuildText,
             parent: ticketCategory,
@@ -75,7 +76,7 @@ module.exports = {
             )
 
         const initalMessage = await ticketChannel.send({
-            content: `${interaction.user} <@&1079230268658958517>`,
+            content: `${interaction.user} <@&${serverSettings.ticketSupportRoleId}>`,
             embeds: [detailsEmbed],
             components: [new ActionRowBuilder().addComponents(require('./closeTicket').data, require('./claimTicket').data)]
         })

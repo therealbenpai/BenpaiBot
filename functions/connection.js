@@ -62,4 +62,84 @@ module.exports = class Database {
     async getTicketLog(ticketId) {
         return (await this.connection.promise().query(`SELECT * FROM tickets WHERE id = '${ticketId}'`).then(rows => rows[0][0]).catch(error => console.log))
     }
+    async getServerSettings(serverId) {
+        /*
+        Server Settings Table: `servers`
+
+        Columns:
+        - id (int) (auto increment)
+        - guildId (varchar(20))
+        - ticketLogChannelId (varchar(20))
+        - ticketSupportRoleId (varchar(20))
+        - ticketCategory (varchar(20))
+        - welcomeChannelId (varchar(20))
+        */
+
+        return (await this.connection.promise().query(`SELECT * FROM servers WHERE guildId = '${serverId}'`).then(rows => rows[0][0]).catch(error => console.log))
+    }
+    async editServerSettings(serverId, columnToChange, newValue) {
+        /*
+        Server Settings Table: `servers`
+
+        Columns:
+        - id (int) (auto increment)
+        - guildId (varchar(20))
+        - ticketLogChannelId (varchar(20))
+        - ticketSupportRoleId (varchar(20))
+        - ticketCategory (varchar(20))
+        - welcomeChannelId (varchar(20))
+
+        Read-Only Columns:
+        - id
+        - guildId
+
+        Columns that can be changed:
+        - ticketLogChannelId
+        - ticketSupportRoleId
+        - ticketCategory
+        - welcomeChannelId
+        */
+
+        switch (columnToChange) {
+            case 'ticketLogChannelId':
+                if (typeof newValue !== 'string') return false;
+                if (newValue.length > 20) return false;
+                break;
+            case 'ticketSupportRoleId':
+                if (typeof newValue !== 'string') return false;
+                if (newValue.length > 20) return false;
+                break;
+            case 'ticketCategory':
+                if (typeof newValue !== 'string') return false;
+                if (newValue.length > 20) return false;
+                break;
+            case 'welcomeChannelId':
+                if (typeof newValue !== 'string') return false;
+                if (newValue.length > 20) return false;
+                break;
+            default:
+                return false;
+        }
+        await this.connection.promise().query(`UPDATE servers SET ${columnToChange} = '${newValue}' WHERE guildId = '${serverId}'`).catch(error => console.log);
+        return true;
+    }
+    async createServerSettings(serverId) {
+        /*
+        Default Values:
+        - ticketLogChannelId: 'pending'
+        - ticketSupportRoleId: 'pending'
+        - ticketCategory: 'pending'
+        - welcomeChannelId: 'pending'
+        */
+
+        const data = {
+            guildId: serverId,
+            ticketLogChannelId: 'pending',
+            ticketSupportRoleId: 'pending',
+            ticketCategory: 'pending',
+            welcomeChannelId: 'pending'
+        }
+        await this.connection.promise().query(`INSERT INTO servers SET ?`, data).catch(error => console.log);
+        return true;
+    }
 }
