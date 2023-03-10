@@ -159,7 +159,7 @@ module.exports = {
                         new ButtonBuilder()
                             .setStyle(ButtonStyle.Link)
                             .setLabel('View Transcript')
-                            .setURL(`https://sparty18.com/cdn/transcripts/${uuid}`)
+                            .setURL(`https://sparty18.com/cdn/transcript/${uuid}`)
                     )
             ]
         })
