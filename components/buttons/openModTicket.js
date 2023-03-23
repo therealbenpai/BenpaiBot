@@ -13,11 +13,6 @@ module.exports = {
         .setCustomId('openmod')
         .setLabel('Open a Moderation Ticket')
         .setStyle(ButtonStyle.Primary),
-    /**
-     * 
-     * @param {import('discord.js').Client} client 
-     * @param {import('discord.js').ButtonInteraction} interaction 
-     */
     async execute(client, interaction) {
         const serverSettings = (await client.database.getServerSettings(interaction.guild.id))
         const ticketCategory = interaction.guild.channels.cache.get(serverSettings.ticketCategory)

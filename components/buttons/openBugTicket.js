@@ -15,7 +15,7 @@ module.exports = {
         .setStyle(ButtonStyle.Primary),
     async execute(client, interaction) {
         const serverSettings = (await client.database.getServerSettings(interaction.guild.id))
-        const ticketCategory = interaction.guild.channels.cache.get(serverSettings.ticketCategory)
+        const ticketCategory = (await interaction.guild.channels.fetch(serverSettings.ticketCategory))
         const ticketChannel = await interaction.guild.channels.create({
             type: ChannelType.GuildText,
             parent: ticketCategory,
@@ -31,13 +31,19 @@ module.exports = {
                 {
                     id: interaction.user.id,
                     allow: [
-                        PermissionFlagsBits.ViewChannel
+                        PermissionFlagsBits.ViewChannel,
+                        PermissionFlagsBits.SendMessages,
+                        PermissionFlagsBits.ManageMessages,
+                        PermissionFlagsBits.AttachFiles,
+                        PermissionFlagsBits.EmbedLinks,
+                        PermissionFlagsBits.AddReactions
                     ],
                     type: OverwriteType.Member
                 },
                 {
                     id: client.user.id,
                     allow: [
+                        PermissionFlagsBits.ManageChannels,
                         PermissionFlagsBits.ViewChannel,
                         PermissionFlagsBits.SendMessages,
                         PermissionFlagsBits.ManageMessages,
@@ -54,12 +60,12 @@ module.exports = {
             ]
         })
 
-        const ticketChannelID = await client.database.createTicketLog(interaction.user.id, 'bug', ticketChannel.id)
+//        const ticketChannelID = await client.database.createTicketLog(interaction.user.id, 'bug', ticketChannel.id)
 
         ticketChannel.setName(`ticket-${ticketChannelID}`)
 
         const detailsEmbed = client.configs.embed()
-            .setTitle('Ticket #' + ticketChannelID)
+            .setTitle(`Ticket #${ticketChannelID}`)
             .setDescription('Thank you for opening a ticket. Please be patient while a staff member assists within this ticket.')
             .addFields(
                 {

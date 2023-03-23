@@ -18,7 +18,8 @@ module.exports = {
                 option.value ? args.push(option.value) : args.push(option.options[0].value)
             });
             // create a triggerLog using the client's database class
-            const logID = await client.database.triggerLog(interaction.user.id, 'command', commandName, args);
+            // const logID = await client.database.triggerLog(interaction.user.id, 'command', commandName, args);
+            const logID = 0;
             fs.readdirSync('./commands')
                 .filter(file => file.endsWith('.js'))
                 .forEach(async file => {

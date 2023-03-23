@@ -11,16 +11,14 @@ module.exports = {
         .setLabel('Claim the Ticket')
         .setStyle(ButtonStyle.Success)
         .setEmoji('🔑'),
-    /**
-     * 
-     * @param {import('discord.js').Client} client 
-     * @param {import('discord.js').ButtonInteraction} interaction 
-     */
     async execute(client, interaction) {
+        const serverSettings = (await client.database.getServerSettings(interaction.guild.id))
+        if (!interaction.member.roles.cache.has(serverSettings.ticketSupportRoleId)) return interaction.reply({ content: 'You do not have permission to claim tickets.', ephemeral: true })
+
         const ticketId = interaction.channel.name.split('-')[1]
 
         const detailsEmbed = client.configs.embed()
-            .setTitle('Ticket #' + ticketId)
+            .setTitle(`Ticket #${ticketId}`)
             .setDescription('Thank you for opening a ticket. Please be patient while a staff member assists within this ticket.')
             .addFields(
                 {
@@ -39,7 +37,7 @@ module.exports = {
                     inline: true
                 }
             )
-        
+
 
         interaction.message.edit({
             content: `${interaction.user}`,

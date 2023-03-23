@@ -12,6 +12,14 @@ module.exports = class Database {
             database: process.env.DB_NAME,
         });
     }
+    /**
+     * 
+     * @param {string} userID 
+     * @param {string} triggerType 
+     * @param {string} triggerName 
+     * @param {string[]} args 
+     * @returns {Promise<number>}
+     */
     async triggerLog(userID, triggerType, triggerName, args) {
         const time = Date.now();
         const data = {
@@ -25,6 +33,13 @@ module.exports = class Database {
         const logID = await this.connection.promise().query(`SELECT id FROM logs WHERE triggerId = '${userID}' AND triggerTime = '${time}'`).then(rows => rows[0][0].id).catch(error => console.log);
         return logID;
     }
+    /**
+     * 
+     * @param {string} userID
+     * @param {string} ticketReason
+     * @param {string} ticketID
+     * @returns {Promise<number>}
+     */
     async createTicketLog(userID, ticketReason, ticketID,) {
         const data = {
             ticketChannelId: ticketID,
@@ -35,6 +50,13 @@ module.exports = class Database {
         const logID = await this.connection.promise().query(`SELECT id FROM tickets WHERE ticketUserId = '${userID}' AND ticketChannelId = '${ticketID}'`).then(rows => rows[0][0].id).catch(error => console.log);
         return logID;
     }
+    /**
+     * 
+     * @param {number} ticketId
+     * @param {string} columnToChange
+     * @param {string|boolean|number} newValue
+     * @returns {Promise<boolean>}
+     */
     async editTicketLog(ticketId, columnToChange, newValue) {
         switch (columnToChange) {
             case 'ticketStaffID':
@@ -59,6 +81,11 @@ module.exports = class Database {
         await this.connection.promise().query(`UPDATE tickets SET ${columnToChange} = '${newValue}' WHERE id = '${ticketId}'`).catch(error => console.log);
         return true;
     }
+    /**
+     * 
+     * @param {string} ticketId
+     * @returns {Promise<{id:number, ticketChannelId: string, ticketUserId: string, ticketReason: string, ticketStaffId: string|null, closed: 0|1, transcript: string|null }|null>}
+     */
     async getTicketLog(ticketId) {
         return (await this.connection.promise().query(`SELECT * FROM tickets WHERE id = '${ticketId}'`).then(rows => rows[0][0]).catch(error => console.log))
     }

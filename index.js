@@ -5,7 +5,7 @@ const fs = require('fs');
 require('dotenv').config();
 const { TOKEN: token } = process.env;
 
-const Database = require('./functions/connection');
+// const Database = require('./functions/connection');
 
 const client = new Client({
     intents: [
@@ -56,7 +56,7 @@ client.configs = {
     embed: () => new EmbedBuilder().setFooter(client.configs.footer).setColor(client.configs.color).setTimestamp(),
 }
 client.timeManager = require('./functions/time');
-client.database = new Database();
+// client.database = new Database();
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {

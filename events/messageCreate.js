@@ -4,6 +4,10 @@ const fs = require('fs');
 module.exports = {
     name: Events.MessageCreate,
     once: false,
+    /**
+     * @param {import('discord.js').Client} client 
+     * @param {import('discord.js').Message} message 
+     */
     async execute(client, message) {
         if (message.author.bot) return;
         const messageTriggers = fs.readdirSync('./triggers/message').filter(file => file.endsWith('.js'));
@@ -13,7 +17,8 @@ module.exports = {
                 if (message.content.toLowerCase().startsWith(phrase)) {
                     const contentArgs = message.content.split(' ');
                     contentArgs.shift();
-                    const id = await client.database.triggerLog(message.author.id, 'message', phrase, args ? contentArgs : []);
+                    const id = 0
+                    // const id = await client.database.triggerLog(message.author.id, 'message', phrase, args ? contentArgs : []);
                     try {
                         await execute(client, message, id);
                     } catch (e) {
@@ -42,6 +47,7 @@ module.exports = {
             await message.channel.messages.fetch(message.reference.messageId)
                 .then(async msg => {
                     if (msg.embeds.length !== 1) return;
+                    if (message.embeds[0])
                     if (!msg.embeds[0].footer) return;
                     if (msg.embeds[0].title !== 'New ModMail Message') return;
                     const embed = msg.embeds[0];

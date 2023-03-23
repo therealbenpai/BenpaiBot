@@ -9,12 +9,6 @@ module.exports = {
         .setCustomId('closeticket')
         .setLabel('Close the Ticket')
         .setStyle(ButtonStyle.Danger),
-    /**
-     * 
-     * @param {import('discord.js').Client} client 
-     * @param {import('discord.js').ButtonInteraction} interaction 
-     * @returns 
-     */
     async execute(client, interaction) {
         /*
         Ticket Channel Standards:
