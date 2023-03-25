@@ -10,10 +10,6 @@
   "author": "sparty182020",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@sentry/integrations": "^7.44.2",
-    "@sentry/node": "^7.38.0",
-    "@sentry/profiling-node": "^0.3.0",
-    "@sentry/tracing": "^7.44.2",
     "discord-html-transcripts": "^3.1.4",
     "discord.js": "^14.8.0",
     "dotenv": "^16.0.3",

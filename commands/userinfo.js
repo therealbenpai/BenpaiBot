@@ -19,7 +19,7 @@ module.exports = {
         const user = interaction.options.getUser('user') || interaction.user;
         const member = interaction.options.getMember('user') || interaction.member;
         const roles = member.roles.cache.map(role => role.toString()).join(' ');
-        const presence = member.presence.activities[0];
+        const presence = member?.presence?.activities[0] || null;
         const embed = client.configs.embed()
             .setAuthor({ name: user.tag, iconURL: user.displayAvatarURL() })
             .setThumbnail(user.displayAvatarURL())

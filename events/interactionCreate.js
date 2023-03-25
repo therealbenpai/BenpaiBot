@@ -13,10 +13,10 @@ module.exports = {
         if (interaction.isChatInputCommand()) {
             const { commandName, options } = interaction;
             // loop through all of the options sent by the user and add them to an array
-            const args = [];
-            options.data.forEach(option => {
-                option.value ? args.push(option.value) : args.push(option.options[0].value)
-            });
+            // const args = [];
+            // options.data.forEach(option => {
+            //     option.value ? args.push(option.value) : args.push(option.options[0].value)
+            // });
             // create a triggerLog using the client's database class
             // const logID = await client.database.triggerLog(interaction.user.id, 'command', commandName, args);
             const logID = 0;
