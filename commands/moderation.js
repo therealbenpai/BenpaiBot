@@ -60,6 +60,11 @@ module.exports = {
                         .setDescription('The user to mute')
                         .setRequired(true)
                 )
+                .addIntegerOption(option =>
+                    option.setName('duration')
+                        .setDescription('The duration of the mute in minutes')
+                        .setRequired(true)
+                )
                 .addStringOption(option =>
                     option.setName('reason')
                         .setDescription('The reason for the mute')
@@ -102,18 +107,19 @@ module.exports = {
                 break;
             case 'kick':
                 await member.kick(reason);
-                await interaction.reply(`Kicked ${member.user.tag} ${reasonSubmission ? `for ${reasonSubmission}` : ''}}`);
+                await interaction.reply(`Kicked ${member.user.tag} ${reasonSubmission ? `for ${reasonSubmission}` : ''}`);
                 break;
             case 'warn':
-                member.send(`You have been warned in ${interaction.guild.name} ${reasonSubmission ? `for ${reasonSubmission}` : ''}}`);
-                await interaction.reply(`Warned ${member.user.tag} ${reasonSubmission ? `for ${reasonSubmission}` : ''}}`);
+                member.send(`You have been warned in ${interaction.guild.name} ${reasonSubmission ? `for ${reasonSubmission}` : ''}`);
+                await interaction.reply(`Warned ${member.user.tag} ${reasonSubmission ? `for ${reasonSubmission}` : ''}`);
                 break;
             case 'mute':
-                member.disableCommunicationUntil()
-                await interaction.reply(`Muted ${member.user.tag} ${reasonSubmission ? `for ${reasonSubmission}` : ''}}`);
+                member.disableCommunicationUntil(Date.now() + interaction.options.getInteger('duration') * 60000);
+                await interaction.reply(`Muted ${member.user.tag} ${reasonSubmission ? `for ${reasonSubmission}` : ''}`);
                 break;
             case 'unmute':
-                await interaction.reply(`Unmuted ${member.user.tag} ${reasonSubmission ? `for ${reasonSubmission}` : ''}}`);
+                member.disableCommunicationUntil(null);
+                await interaction.reply(`Unmuted ${member.user.tag} ${reasonSubmission ? `for ${reasonSubmission}` : ''}`);
                 break;
         }
     }
