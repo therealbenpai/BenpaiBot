@@ -11,7 +11,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "discord-html-transcripts": "^3.1.4",
-    "discord.js": "^14.10.2",
+    "discord.js": "^14.11.0",
     "dotenv": "^16.0.3",
     "mysql2": "^3.3.0",
     "ssh2": "^1.12.0",
